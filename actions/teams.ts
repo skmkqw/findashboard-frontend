@@ -20,7 +20,7 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
 
         const personalSpace = PersonalSpaceSchema.parse(response.data);
 
-        savePersonalSpace(personalSpace.id)
+        savePersonalSpace(personalSpace)
 
         return response.data;
     } catch (error: unknown) {
@@ -41,6 +41,7 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
     }
 }
 
-function savePersonalSpace(spaceId: string) {
-    nookies.set(null, "PersonalSpaceId", spaceId, COOKIE_OPTIONS);
+function savePersonalSpace(personalSpace: PersonalSpace) {
+    nookies.set(null, "PersonalSpaceId", personalSpace.id, COOKIE_OPTIONS);
+    nookies.set(null, "PersonalSpaceName", personalSpace.name, COOKIE_OPTIONS);
 }
