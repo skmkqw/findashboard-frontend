@@ -69,7 +69,7 @@ export default function LoginForm({ className }: { className?: string }) {
                         control={form.control}
                         name="email"
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="h-24">
                                 <FormLabel className="text-lg">Email</FormLabel>
                                 <FormControl>
                                     <Input
@@ -88,7 +88,7 @@ export default function LoginForm({ className }: { className?: string }) {
                         control={form.control}
                         name="password"
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="h-20">
                                 <FormLabel className="text-lg">Password</FormLabel>
                                 <FormControl>
                                     <Input
@@ -103,7 +103,9 @@ export default function LoginForm({ className }: { className?: string }) {
                         )}
                     />
 
-                    {errorMessage && <FormMessage>{errorMessage}</FormMessage>}
+                    <div className="min-h-5">
+                        {errorMessage && <FormMessage className="text-base">{errorMessage}</FormMessage>}
+                    </div>
                 </div>
 
                 <Button
