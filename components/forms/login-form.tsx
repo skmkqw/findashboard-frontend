@@ -50,14 +50,18 @@ export default function LoginForm({ className }: { className?: string }) {
             await loginUser(values);
             router.push("/");
         } catch (error: any) {
-            setErrorMessage(error.message || "Failed to register. Please try again.");
+            console.error(error);
+            setErrorMessage(error.message || "Failed to log in. Please try again.");
         }
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}
-                  className={cn("max-w-md bg-secondary text-secondary-foreground rounded-lg p-6 sm:p-10 flex flex-col gap-8", className)}>
+            <form
+                method="POST"
+                onSubmit={form.handleSubmit(onSubmit)}
+                className={cn("max-w-md bg-[#1C1917] text-white rounded-lg p-6 sm:p-10 flex flex-col gap-8 border-[1px] border-secondary", className)}
+            >
                 <h2 className="text-3xl font-black">Login</h2>
 
                 <div className="flex flex-col gap-6">

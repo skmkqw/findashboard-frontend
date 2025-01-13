@@ -68,6 +68,7 @@ export default function RegisterForm({ className }: { className?: string }) {
             await registerUser(values);
             router.push("/welcome");
         } catch (error: any) {
+            console.error(error);
             setErrorMessage(error.message || "Failed to register. Please try again.");
         }
 
@@ -75,8 +76,11 @@ export default function RegisterForm({ className }: { className?: string }) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}
-                  className={cn("max-w-md bg-secondary text-secondary-foreground rounded-lg p-6 sm:p-10 flex flex-col gap-8", className)}>
+            <form
+                method="POST"
+                onSubmit={form.handleSubmit(onSubmit)}
+                className={cn("max-w-md bg-[#1C1917] text-white rounded-lg p-6 sm:p-10 flex flex-col gap-8 border-[1px] border-secondary", className)}
+            >
                 <h2 className="text-3xl font-black">Register</h2>
 
                 <div className="flex flex-col gap-6">
