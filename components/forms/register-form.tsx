@@ -148,7 +148,7 @@ export default function RegisterForm({ className }: { className?: string }) {
                         control={form.control}
                         name="password"
                         render={({ field }) => (
-                            <FormItem className="h-20">
+                            <FormItem className="h-24">
                                 <FormLabel className="text-lg">Password</FormLabel>
                                 <FormControl>
                                     <Input
