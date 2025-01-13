@@ -32,7 +32,7 @@ export async function registerUser(data: { firstName: string; lastName: string; 
             if (error.response?.status === 409) {
                 throw new Error("User already exists");
             }
-            throw new Error(error.response?.data?.message || "Login failed");
+            throw new Error(error.response?.data?.message || "Registration failed. Please, try again later");
         }
         throw new Error("An unexpected error occurred");
     }
@@ -56,7 +56,7 @@ export async function loginUser(data: { email: string; password: string; }) {
             if (error.response?.status === 401) {
                 throw new Error("Invalid credentials");
             }
-            throw new Error(error.response?.data?.message || "Login failed");
+            throw new Error(error.response?.data?.message || "Login failed. Please, try again later");
         }
         throw new Error("An unexpected error occurred");
     }

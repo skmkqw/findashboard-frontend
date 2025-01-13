@@ -64,12 +64,15 @@ export default function RegisterForm({ className }: { className?: string }) {
     const router = useRouter();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setErrorMessage("");
         try {
             await registerUser(values);
             router.push("/welcome");
         } catch (error: any) {
             console.error(error);
-            setErrorMessage(error.message || "Failed to register. Please try again.");
+            setTimeout(() => {
+                setErrorMessage(error.message || "Failed to register. Please try again.");
+            }, 100);
         }
 
     }
@@ -161,7 +164,7 @@ export default function RegisterForm({ className }: { className?: string }) {
                     />
 
                     <div className="min-h-5">
-                        {errorMessage && <FormMessage>{errorMessage}</FormMessage>}
+                        {errorMessage && <FormMessage className="text-base">{errorMessage}</FormMessage>}
                     </div>
                 </div>
 

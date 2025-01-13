@@ -46,12 +46,15 @@ export default function LoginForm({ className }: { className?: string }) {
     const router = useRouter();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setErrorMessage("");
         try {
             await loginUser(values);
             router.push("/");
         } catch (error: any) {
             console.error(error);
-            setErrorMessage(error.message || "Failed to log in. Please try again.");
+            setTimeout(() => {
+                setErrorMessage(error.message || "Failed to register. Please try again.");
+            }, 100);
         }
     }
 
