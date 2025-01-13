@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import nookies from "nookies";
 import { z } from "zod";
+import { COOKIE_OPTIONS } from "@/lib/cookies";
 import axios from "axios";
 
 const PersonalSpaceSchema = z.object({
@@ -20,7 +21,7 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
 
         const personalSpace = PersonalSpaceSchema.parse(response.data);
 
-        savePersonalSpace(personalSpace)
+        savePersonalSpace(personalSpace);
 
         return response.data;
     } catch (error: unknown) {

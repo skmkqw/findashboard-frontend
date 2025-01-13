@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import nookies from "nookies";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { COOKIE_OPTIONS } from "@/lib/cookies";
 import axios from "axios";
 
 const UserSchema = z.object({
