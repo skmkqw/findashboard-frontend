@@ -14,7 +14,7 @@ type PersonalSpace = z.infer<typeof PersonalSpaceSchema>;
 
 export async function createPersonalSpace(data: { spaceName: string; }) {
     try {
-        const response = await axiosInstance.post("api/personalSpaces", data, {
+        const response = await axiosInstance.post("/api/personalSpaces", data, {
             withCredentials: true
         });
 
@@ -25,19 +25,15 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
         return response.data;
     } catch (error: unknown) {
         if (error instanceof z.ZodError) {
-            throw new RequestError("Invalid input data", 400, error.errors);
+            throw new Error("Invalid input data");
         }
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 409) {
-                throw new Error("Personal space already exists.");
+                throw new Error("Personal space already exists");
             }
-
-            throw new RequestError(
-                error.response?.data?.message || "Personal space creation failed.",
-                error.response?.status
-            );
+            throw new Error(error.response?.data?.message || "Login failed");
         }
-        throw new RequestError("An unexpected error occurred");
+        throw new Error("An unexpected error occurred");
     }
 }
 

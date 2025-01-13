@@ -15,52 +15,49 @@ type User = z.infer<typeof UserSchema>;
 
 export async function registerUser(data: { firstName: string; lastName: string; email: string; password: string; }) {
     try {
-        const response = await axiosInstance.post("api/auth/register", data, {
+        const response = await axiosInstance.post("/api/auth/register", data, {
             withCredentials: true
         });
 
         const user = UserSchema.parse(response.data.user);
         saveUserData(user);
 
-        return { user, success: true };
+        return;
     } catch (error: unknown) {
         if (error instanceof z.ZodError) {
-            throw new RequestError("Invalid input data", 400, error.errors);
+            throw new Error("Invalid input data");
         }
         if (axios.isAxiosError(error)) {
-            throw new RequestError(
-                error.response?.data?.message || "Registration failed",
-                error.response?.status
-            );
+            if (error.response?.status === 409) {
+                throw new Error("User already exists");
+            }
+            throw new Error(error.response?.data?.message || "Login failed");
         }
-        throw new RequestError("An unexpected error occurred");
+        throw new Error("An unexpected error occurred");
     }
 }
 
 export async function loginUser(data: { email: string; password: string; }) {
     try {
-        const response = await axiosInstance.post("api/auth/login", data, {
+        const response = await axiosInstance.post("/api/auth/login", data, {
             withCredentials: true
         });
 
         const user = UserSchema.parse(response.data.user);
         saveUserData(user);
 
-        return { user, success: true };
+        return;
     } catch (error: unknown) {
         if (error instanceof z.ZodError) {
-            throw new RequestError("Invalid input data", 400, error.errors);
+            throw new Error("Invalid input data");
         }
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 401) {
-                throw new RequestError("Invalid credentials", 401);
+                throw new Error("Invalid credentials");
             }
-            throw new RequestError(
-                error.response?.data?.message || "Login failed",
-                error.response?.status
-            );
+            throw new Error(error.response?.data?.message || "Login failed");
         }
-        throw new RequestError("An unexpected error occurred");
+        throw new Error("An unexpected error occurred");
     }
 }
 
