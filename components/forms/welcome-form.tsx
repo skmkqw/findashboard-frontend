@@ -48,29 +48,32 @@ export default function WelcomeForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center gap-10">
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 items-center">
                     <FormField
                         control={form.control}
                         name="spaceName"
                         render={({ field }) => (
                             <FormItem
-                                className={cn("rounded-lg bg-secondary px-5 py-2 shadow-[0px_0px_45px_10px_rgba(220,56,69,0.9)] sm:min-w-[400px]")}>
+                                className={cn("rounded-lg bg-secondary px-3 py-1 sm:min-w-[450px]")}>
                                 <FormControl>
                                     <Input
                                         type="text"
                                         placeholder="Your space name (eg. personal)..."
-                                        className="bg-background py-3 text-base text-primary rounded-lg"
+                                        className="bg-background py-3 text-lg rounded-lg"
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage />
-                                {errorMessage && <FormMessage>{errorMessage}</FormMessage>}
+                                <FormMessage className="text-center"/>
                             </FormItem>
                         )}
                     />
+
+                    <div className="min-h-5">
+                        {errorMessage && <FormMessage className="text-secondary text-center">{errorMessage}</FormMessage>}
+                    </div>
                 </div>
 
-                <Button type="submit" className="text-xl py-6 px-10">Begin!</Button>
+                <Button type="submit" variant="secondary" className="text-xl py-6 px-10">Begin!</Button>
                 <Button
                     variant="ghost"
                     onClick={handleSkipButtonClick}

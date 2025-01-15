@@ -6,7 +6,7 @@ export default function WelcomePage() {
     return (
         <div className={cn("flex flex-col items-center gap-20 justify-between min-h-full")}>
             <Logo
-                // className="text-5xl"
+                className="text-5xl sm:text-6xl"
                 type="long"
             />
             <div className="flex flex-col text-center gap-10 max-w-3xl">

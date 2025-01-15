@@ -32,7 +32,7 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
             if (error.response?.status === 409) {
                 throw new Error("Personal space already exists");
             }
-            throw new Error(error.response?.data?.message || "Login failed");
+            throw new Error(error.response?.data?.message || "Failed to create personal space. Please try again later");
         }
         throw new Error("An unexpected error occurred");
     }
