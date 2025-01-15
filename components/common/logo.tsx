@@ -1,10 +1,32 @@
 import localFont from "next/font/local";
-import { clsx } from "clsx";
+import { cn } from "@/lib/utils";
 
-const porterSans = localFont({ src: "../../public/fonts/porter-sans-block.ttf" });
+const porterSans = localFont({
+    src: "../../public/fonts/porter-sans-block.ttf",
+    variable: '--font-porter-sans',
+    display: 'swap',
+});
 
-export default function Logo({type, className}: {type: "short" | "long", className?: string}) {
+interface LogoProps {
+    type: "short" | "long";
+    className?: string;
+    as?: 'h1' | 'p' | 'span';
+}
+
+export default function Logo({
+    type,
+    className,
+    as: Component = 'p'
+}: LogoProps) {
     return (
-        <p className={clsx(porterSans.className, "text-3xl", className)}>{type === "short" ? "Z" : "ZBANK"}</p>
+        <Component
+            className={cn(
+                porterSans.className,
+                "text-3xl select-none cursor-pointer",
+                className
+            )}
+        >
+            {type === "short" ? "Z" : "ZBANK"}
+        </Component>
     );
 }
