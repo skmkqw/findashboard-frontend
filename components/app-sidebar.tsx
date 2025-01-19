@@ -1,9 +1,21 @@
 "use client"
 
 import * as React from "react"
-import { ArchiveX, Command, File, Inbox, Send, Trash2 } from "lucide-react"
+import {
+  InboxIcon,
+  HomeIcon,
+  PresentationIcon, 
+  ChartBarIcon,
+  UserIcon,
+  WalletIcon,
+  UsersIcon, 
+  SlidersHorizontalIcon,
+  ArrowUpDownIcon
+} from "lucide-react";
 
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+
 import {
   Sidebar,
   SidebarContent,
@@ -17,44 +29,64 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { Switch } from "@/components/ui/switch"
+import Logo from "./common/logo";
 
-// This is sample data
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Inbox",
       url: "#",
-      icon: Inbox,
+      icon: InboxIcon,
       isActive: true,
     },
     {
-      title: "Drafts",
+      title: "Home",
       url: "#",
-      icon: File,
+      icon: HomeIcon,
       isActive: false,
     },
     {
-      title: "Sent",
+      title: "Projects",
       url: "#",
-      icon: Send,
+      icon: PresentationIcon,
       isActive: false,
     },
     {
-      title: "Junk",
+      title: "Activities",
       url: "#",
-      icon: ArchiveX,
+      icon: ChartBarIcon,
       isActive: false,
     },
     {
-      title: "Trash",
+      title: "Profiles",
       url: "#",
-      icon: Trash2,
+      icon: UserIcon,
+      isActive: false,
+    },
+    {
+        title: "Wallets",
+        url: "#",
+        icon: WalletIcon,
+        isActive: false,
+    },
+    {
+        title: "Team",
+        url: "#",
+        icon: UsersIcon,
+        isActive: false,
+      },
+  ],
+  navBottom: [
+    {
+        title: "Switch Team",
+        url: "#",
+        icon: ArrowUpDownIcon,
+        isActive: false,
+    },
+    {
+      title: "Settings",
+      url: "#",
+      icon: SlidersHorizontalIcon,
       isActive: false,
     },
   ],
@@ -143,8 +175,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Note: I'm using state to show active item.
-  // IRL you should use the url/router.
+  // TODO: Use the url/router to show active item instead of state.
   const [activeItem, setActiveItem] = React.useState(data.navMain[0])
   const [mails, setMails] = React.useState(data.mails)
   const { setOpen } = useSidebar()
@@ -155,9 +186,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row"
       {...props}
     >
-      {/* This is the first sidebar */}
-      {/* We disable collapsible and adjust width to icon. */}
-      {/* This will make the sidebar appear as icons. */}
       <Sidebar
         collapsible="none"
         className="!w-[calc(var(--sidebar-width-icon)_+_1px)] border-r"
@@ -167,12 +195,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
                 <a href="#">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    <Command className="size-4" />
-                  </div>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Acme Inc</span>
-                    <span className="truncate text-xs">Enterprise</span>
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                    <Logo
+                      type="short"
+                      className="text-2xl"
+                    />
                   </div>
                 </a>
               </SidebarMenuButton>
@@ -214,22 +241,41 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <p>Sidebar Footer</p>
+          <SidebarMenu>
+                {data.navBottom.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      tooltip={{
+                        children: item.title,
+                        hidden: false,
+                      }}
+                      onClick={() => {
+                        setActiveItem(item)
+                        const mail = data.mails.sort(() => Math.random() - 0.5)
+                        setMails(
+                          mail.slice(
+                            0,
+                            Math.max(5, Math.floor(Math.random() * 10) + 1)
+                          )
+                        )
+                        setOpen(true)
+                      }}
+                      isActive={activeItem.title === item.title}
+                      className="px-2.5 md:px-2"
+                    >
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
 
-      {/* This is the second sidebar */}
-      {/* We disable collapsible and let it fill remaining space */}
       <Sidebar collapsible="none" className="hidden flex-1 md:flex">
         <SidebarHeader className="gap-3.5 border-b p-4">
-          <div className="flex w-full items-center justify-between">
-            <div className="text-base font-medium text-foreground">
+          <div className="text-base font-medium text-foreground">
               {activeItem.title}
-            </div>
-            <Label className="flex items-center gap-2 text-sm">
-              <span>Unreads</span>
-              <Switch className="shadow-none" />
-            </Label>
           </div>
           <SidebarInput placeholder="Type to search..." />
         </SidebarHeader>
