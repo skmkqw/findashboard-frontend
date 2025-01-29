@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/sidebar/index";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/common/mode-toggle";
 import NavUser from "@/components/nav-user";
+import Logo from "@/components/common/logo";
 
 export const metadata: Metadata = {
     title: "ZBank",
@@ -35,6 +36,7 @@ export default function RootLayout({
                             "--sidebar-width": "350px",
                         } as React.CSSProperties
                     }
+                    className="hidden relative lg:flex"
                     >
                         <AppSidebar />
                         <SidebarInset>
@@ -58,6 +60,13 @@ export default function RootLayout({
                             </div>
                         </SidebarInset>
                     </SidebarProvider>
+
+                    <div className="relative lg:hidden flex flex-col gap-4 w-screen min-h-screen items-center justify-center p-4">
+                        <div className="flex flex-col gap-4 max-w-sm items-center justify-center text-center">
+                        <Logo type="long" className="text-4xl"/>
+                        <p className="text-sm sm:text-base text-muted-foreground">ZBank is designed for desktop use only. Please use a desktop browser to access ZBank.</p>
+                        </div>
+                    </div>
                 </ThemeProvider>
             </body>
         </html>
