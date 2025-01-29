@@ -57,7 +57,7 @@ export const data: {
         section: "wallets",
       },
       {
-        title: "Team",
+        title: "Team Members",
         url: "#",
         icon: UsersIcon,
         hasContent: true,
