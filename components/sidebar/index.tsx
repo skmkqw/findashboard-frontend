@@ -25,6 +25,11 @@ import { useSectionData } from './hooks/use-section-data';
 import type { NavItem, SectionData, SectionDataKey } from './types';
 import { data } from './data';
 import { SlidersHorizontalIcon } from 'lucide-react';
+import { WalletsSection } from './sections/wallets-section';
+import { ProjectsSection } from './sections/projects-section';
+import { ActivitiesSection } from './sections/activities-section';
+import { TeamSection } from './sections/team-section';
+import { SwitchTeamSection } from './sections/switch-team-section';
 
 const getSectionSearchFields = (section: SectionDataKey): string[] => {
   const searchFieldsMap: Record<SectionDataKey, string[]> = {
@@ -65,21 +70,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         profiles: (items: SectionData['profiles']) => (
           <ProfilesSection items={items} />
         ),
-        // wallets: (items: SectionData['wallets']) => (
-        //   <WalletsSection items={items} />
-        // ),
-        // projects: (items: SectionData['projects']) => (
-        //   <ProjectsSection items={items} />
-        // ),
-        // activities: (items: SectionData['activities']) => (
-        //   <ActivitiesSection items={items} />
-        // ),
-        // team: (items: SectionData['team']) => (
-        //   <TeamSection items={items} />
-        // ),
-        // switchTeam: (items: SectionData['switchTeam']) => (
-        //   <SwitchTeamSection items={items} />
-        // ),
+        wallets: (items: SectionData['wallets']) => (
+          <WalletsSection items={items} />
+        ),
+        projects: (items: SectionData['projects']) => (
+          <ProjectsSection items={items} />
+        ),
+        activities: (items: SectionData['activities']) => (
+          <ActivitiesSection items={items} />
+        ),
+        team: (items: SectionData['team']) => (
+          <TeamSection items={items} />
+        ),
+        switchTeam: (items: SectionData['switchTeam']) => (
+          <SwitchTeamSection items={items} />
+        ),
       };
   
       const SectionComponent = sectionComponents[activeItem.section];
