@@ -38,7 +38,7 @@ Findashboard is a financial dashboard designed for teams, focusing on activities
 5. Open a pull request
 
 ## License
-MIT License
+[MIT License](/LICENSE)
 
 ## Links
 [Backend repository](https://github.com/skmkqw/findashboard)
