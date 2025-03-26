@@ -1,6 +1,6 @@
 export const COOKIE_OPTIONS = {
-    maxAge: 30 * 24 * 60 * 60,
+    expires: 1,
     path: "/",
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict" as const
+    sameSite: "Lax" as const
 } as const;
