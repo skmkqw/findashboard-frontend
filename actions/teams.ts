@@ -1,7 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import nookies from "nookies";
 import { z } from "zod";
-import { COOKIE_OPTIONS } from "@/lib/cookies";
 import axios from "axios";
 
 const PersonalSpaceSchema = z.object({
@@ -15,13 +13,9 @@ type PersonalSpace = z.infer<typeof PersonalSpaceSchema>;
 
 export async function createPersonalSpace(data: { spaceName: string; }) {
     try {
-        const response = await axiosInstance.post("/api/personalSpaces", data, {
-            withCredentials: true
-        });
+        const response = await axiosInstance.post("/api/personalSpaces", data);
 
-        const personalSpace = PersonalSpaceSchema.parse(response.data);
-
-        savePersonalSpace(personalSpace);
+        const personalSpace: PersonalSpace = PersonalSpaceSchema.parse(response.data);
 
         return response.data;
     } catch (error: unknown) {
@@ -36,9 +30,4 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
         }
         throw new Error("An unexpected error occurred");
     }
-}
-
-function savePersonalSpace(personalSpace: PersonalSpace) {
-    nookies.set(null, "PersonalSpaceId", personalSpace.id, COOKIE_OPTIONS);
-    nookies.set(null, "PersonalSpaceName", personalSpace.name, COOKIE_OPTIONS);
 }

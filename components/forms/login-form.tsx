@@ -1,11 +1,5 @@
 "use client";
 
-import { z } from "zod";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -15,9 +9,15 @@ import {
     FormLabel,
     FormMessage
 } from "@/components/ui/form";
-import { loginUser } from "@/actions/auth";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/stores/auth-store";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
     email: z
@@ -41,6 +41,7 @@ export default function LoginForm({ className }: { className?: string }) {
         }
     });
 
+    const { login } = useAuthStore();
     const [errorMessage, setErrorMessage] = useState("");
 
     const router = useRouter();
@@ -48,7 +49,7 @@ export default function LoginForm({ className }: { className?: string }) {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setErrorMessage("");
         try {
-            await loginUser(values);
+            await login(values);
             router.push("/");
         } catch (error: any) {
             console.error(error);
