@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "@/actions/auth";
+import { useAuthStore } from "@/stores/auth-store";
 
 const formSchema = z.object({
     firstName: z
@@ -59,6 +59,7 @@ export default function RegisterForm({ className }: { className?: string }) {
         }
     });
 
+    const { register } = useAuthStore();
     const [errorMessage, setErrorMessage] = useState("");
 
     const router = useRouter();
@@ -66,7 +67,7 @@ export default function RegisterForm({ className }: { className?: string }) {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setErrorMessage("");
         try {
-            await registerUser(values);
+            await register(values);
             router.push("/welcome");
         } catch (error: any) {
             console.error(error);
