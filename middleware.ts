@@ -22,11 +22,17 @@ export function middleware(request: NextRequest) {
 
         if (currentTime >= expirationTime) {
             console.warn("Token expired, redirecting to login...");
-            return NextResponse.redirect(new URL("/login", request.url));
+            const response = NextResponse.redirect(new URL("/login", request.url));
+            response.cookies.set("AuthToken", "", { expires: new Date(0), path: "/" });
+
+            return response;
         }
     } catch (error) {
         console.error("Invalid token format, redirecting to login...");
-        return NextResponse.redirect(new URL("/login", request.url));
+        const response = NextResponse.redirect(new URL("/login", request.url));
+        response.cookies.set("AuthToken", "", { expires: new Date(0), path: "/" });
+
+        return response;
     }
 
     return NextResponse.next();
