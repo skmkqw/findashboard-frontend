@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
-import nookies from "nookies";
 import { z } from "zod";
+import Cookies from "js-cookie";
 import { COOKIE_OPTIONS } from "@/lib/cookies";
 import axios from "axios";
 
@@ -39,6 +39,6 @@ export async function createPersonalSpace(data: { spaceName: string; }) {
 }
 
 function savePersonalSpace(personalSpace: PersonalSpace) {
-    nookies.set(null, "PersonalSpaceId", personalSpace.id, COOKIE_OPTIONS);
-    nookies.set(null, "PersonalSpaceName", personalSpace.name, COOKIE_OPTIONS);
+    Cookies.set("PersonalSpaceId", personalSpace.id, COOKIE_OPTIONS);
+    Cookies.set("PersonalSpaceName", personalSpace.name, COOKIE_OPTIONS);
 }
