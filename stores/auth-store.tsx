@@ -1,10 +1,7 @@
 "use client";
 
 import { axiosInstance } from "@/lib/axios";
-import { COOKIE_OPTIONS } from "@/lib/cookies";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { create } from "zustand";
@@ -26,25 +23,20 @@ type AuthState = {
     login: (data: { email: string; password: string; }) => Promise<void>;
     register: (data: { firstName: string; lastName: string; email: string; password: string }) => Promise<void>;
     logout: () => void;
-    checkTokenExpiration: () => void;
 };
 
 export const useAuthStore = create<AuthState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             user: null,
             isAuthenticated: false,
 
             login: async (data: { email: string; password: string; }) => {
                 try {
-                    const response = await axiosInstance.post("/api/auth/login", data, {
-                        withCredentials: true
-                    });
+                    const response = await axiosInstance.post("/api/auth/login", data);
 
                     const user = UserSchema.parse(response.data.user);
                     set({ user, isAuthenticated: true });
-                    Cookies.set("AuthToken", response.data.token, COOKIE_OPTIONS);
-                    get().checkTokenExpiration();
                 } catch (error: any) {
                     if (error instanceof z.ZodError) {
                         throw new Error("Invalid input data");
@@ -62,14 +54,10 @@ export const useAuthStore = create<AuthState>()(
 
             register: async (data) => {
                 try {
-                    const response = await axiosInstance.post("/api/auth/register", data, {
-                        withCredentials: true
-                    });
+                    const response = await axiosInstance.post("/api/auth/register", data);
 
                     const user = UserSchema.parse(response.data.user);
                     set({ user, isAuthenticated: true });
-                    Cookies.set("AuthToken", response.data.token, COOKIE_OPTIONS);
-                    get().checkTokenExpiration();
                 } catch (error: any) {
                     if (error instanceof z.ZodError) {
                         throw new Error("Invalid input data");
@@ -86,32 +74,9 @@ export const useAuthStore = create<AuthState>()(
 
             logout: () => {
                 axios.post("/api/auth/logout").catch(() => { });
-                Cookies.remove("AuthToken", COOKIE_OPTIONS);
                 set({ user: null, isAuthenticated: false });
                 redirect("/login");
             },
-
-            checkTokenExpiration: () => {
-                const token = Cookies.get("AuthToken");
-                if (!token) return;
-
-                try {
-                    const decoded: { exp: number } = jwtDecode(token);
-                    const expirationTime = decoded.exp * 1000;
-                    const currentTime = Date.now();
-
-                    if (currentTime >= expirationTime) {
-                        get().logout();
-                    } else {
-                        setTimeout(() => {
-                            get().logout();
-                        }, expirationTime - currentTime);
-                    }
-                } catch (error) {
-                    console.error("Invalid token format", error);
-                    get().logout();
-                }
-            }
         }),
         {
             name: "auth-storage",
