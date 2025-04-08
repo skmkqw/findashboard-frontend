@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, JSX } from 'react';
+import React, { useState, useMemo, JSX, useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -30,6 +30,7 @@ import { ProjectsSection } from './sections/projects-section';
 import { ActivitiesSection } from './sections/activities-section';
 import { TeamSection } from './sections/team-section';
 import { SwitchTeamSection } from './sections/switch-team-section';
+import { useTeamStore } from '@/stores/team-store';
 
 const getSectionSearchFields = (section: SectionDataKey): string[] => {
   const searchFieldsMap: Record<SectionDataKey, string[]> = {
@@ -56,6 +57,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       activeItem.section ? getSectionSearchFields(activeItem.section) : []
     );
   
+    const { getTeams } = useTeamStore();
+
+    useEffect(() => {
+      getTeams().catch(console.error);
+    }, []);
+    
     const renderSectionContent = useMemo(() => {
       if (!activeItem.section) return null;
   
@@ -83,7 +90,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <TeamSection items={items} />
         ),
         switchTeam: (items: SectionData['switchTeam']) => (
-          <SwitchTeamSection items={items} />
+          <SwitchTeamSection />
         ),
       };
   
@@ -212,7 +219,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarHeader>
 
           <SidebarContent>
-            <SidebarGroup className="px-0">
+            <SidebarGroup className="p-0">
               <SidebarGroupContent>
                 {renderSectionContent}
               </SidebarGroupContent>
