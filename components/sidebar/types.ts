@@ -1,7 +1,13 @@
 import { LucideIcon } from "lucide-react";
 
-export type InboxItem = {
+export { TeamSchema } from "@/stores/team-store";
+export type { Team } from "@/stores/team-store";
+
+interface BaseItem {
   id: string;
+}
+
+export interface InboxItem extends BaseItem {
   name: string;
   email: string;
   date: string;
@@ -9,43 +15,37 @@ export type InboxItem = {
   isUnread: boolean;
 }
 
-export type ProfileItem = {
-  id: string;
+export interface ProfileItem extends BaseItem {
   name: string;
   netWorth: string;
 }
 
-export type WalletItem = {
-  id: string;
+export interface WalletItem extends BaseItem {
   address: string;
   totalWorth: string;
 }
 
-export type ProjectItem = {
-  id: string;
+export interface ProjectItem extends BaseItem {
   name: string;
   description: string;
 }
 
-export type TeamItem = {
-  id: string;
+export interface TeamItem extends BaseItem {
   name: string;
 }
 
-export type SwitchTeamItem = {
-  id: string;
+export interface SwitchTeamItem extends BaseItem {
   name: string;
   description: string;
 }
 
-export type ActivityItem = {
-  id: string;
+export interface ActivityItem extends BaseItem {
   name: string;
   projectName: string;
   description: string;
 }
 
-export type SectionData = {
+export interface SectionData {
   inbox: InboxItem[];
   profiles: ProfileItem[];
   wallets: WalletItem[];
@@ -57,11 +57,7 @@ export type SectionData = {
 
 export type SectionDataKey = keyof SectionData;
 
-export interface BaseSectionProps<T> {
-    items: T[];
-}
-
-export type NavItem = {
+export interface NavItem {
   title: string;
   icon: LucideIcon;
   hasContent: boolean;
