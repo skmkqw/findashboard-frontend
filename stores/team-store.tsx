@@ -6,7 +6,7 @@ import { z } from "zod";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const TeamSchema = z.object({
+export const TeamSchema = z.object({
     id: z.string(),
     name: z.string(),
     description: z.string().nullable()
@@ -18,7 +18,7 @@ const TeamsResponseSchema = z.object({
 });
 
 
-type Team = z.infer<typeof TeamSchema>;
+export type Team = z.infer<typeof TeamSchema>;
 
 type TeamState = {
     activeTeam: Team | null;
