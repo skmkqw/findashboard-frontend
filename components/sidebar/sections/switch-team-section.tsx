@@ -1,22 +1,27 @@
+import { useTeamStore } from '@/stores/team-store';
 import React from 'react';
-import type { SwitchTeamItem } from '../types';
-import type { BaseSectionProps } from '../types';
 
-interface SwitchTeamSectionProps extends BaseSectionProps<SwitchTeamItem> {}
+export const SwitchTeamSection: React.FC = () => {
+  const { teams, activeTeam, switchTeam } = useTeamStore();
 
-export const SwitchTeamSection: React.FC<SwitchTeamSectionProps> = ({ items }) => {
   return (
     <>
-      {items.map((team) => (
-        <a
-          href={`/activities/${team.id}`}
-          key={team.id}
-          className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-        >
-          <div className="font-medium">{team.name}</div>
-          <div className="mt-1 text-xs text-muted-foreground">{team.description}</div>
-        </a>
-      ))}
+      {teams.map((team) => {
+        const isActive = activeTeam?.id === team.id;
+
+        return (
+          <a
+            key={team.id}
+            onClick={() => switchTeam(team)}
+            className={`flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer
+              ${isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""}
+            `}
+          >
+            <div className="font-medium">{team.name}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{team.description}</div>
+          </a>
+        );
+      })}
     </>
   );
 };
