@@ -48,6 +48,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                     set({ user, isAuthenticated: true });
                 } catch (error: any) {
                     if (error instanceof z.ZodError) {
+                        console.log(error.issues)
                         throw new Error("Invalid input data");
                     }
                     if (axios.isAxiosError(error)) {
