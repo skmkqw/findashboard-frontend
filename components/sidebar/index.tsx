@@ -154,7 +154,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/* Content sidebar */}
       {activeItem.hasContent && (
         <Sidebar collapsible="none" className="hidden flex-1 md:flex">
-          <SidebarHeader className="gap-3.5 border-b p-4">
+          <SidebarHeader className="border-b p-4">
             <div className="flex w-full items-center justify-between">
               <div className="text-base font-medium text-foreground">
                 {activeItem.title}
