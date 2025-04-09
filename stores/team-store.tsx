@@ -14,7 +14,7 @@ export const TeamSchema = z.object({
 
 const TeamsResponseSchema = z.object({
     teams: z.array(TeamSchema),
-    personalSpace: TeamSchema,
+    personalSpace: TeamSchema.nullable(),
 });
 
 
@@ -24,7 +24,6 @@ type TeamState = {
     activeTeam: Team | null;
     teams: Array<Team>;
     personalSpace: Team | null;
-    hasInitialized: boolean;
     getTeams: () => Promise<void>;
     switchTeam: (team: Team) => void;
 };
@@ -35,7 +34,6 @@ export const useTeamStore = create<TeamState>()(
             activeTeam: null,
             teams: [],
             personalSpace: null,
-            hasInitialized: false,
 
             getTeams: async () => {
                 try {
@@ -44,14 +42,11 @@ export const useTeamStore = create<TeamState>()(
 
                     set((state) => {
                         return {
-                          teams: parsed.teams,
-                          personalSpace: parsed.personalSpace,
-                          activeTeam: !state.hasInitialized
-                            ? parsed.personalSpace ?? parsed.teams[0] ?? null
-                            : state.activeTeam,
-                          hasInitialized: true,
+                            teams: parsed.teams,
+                            personalSpace: parsed.personalSpace,
+                            activeTeam: state.activeTeam === null ? parsed.teams[0] ?? parsed.personalSpace : state.activeTeam,
                         };
-                      });
+                    });
 
                 } catch (error: any) {
                     if (axios.isAxiosError(error)) {
