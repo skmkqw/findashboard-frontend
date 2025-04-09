@@ -20,16 +20,23 @@ type User = z.infer<typeof UserSchema> | null;
 type AuthState = {
     user: User;
     isAuthenticated: boolean;
+};
+
+type AuthActions = {
     login: (data: { email: string; password: string; }) => Promise<void>;
     register: (data: { firstName: string; lastName: string; email: string; password: string }) => Promise<void>;
     logout: () => void;
-};
+}
 
-export const useAuthStore = create<AuthState>()(
+const initialState: AuthState = {
+    user: null,
+    isAuthenticated: false
+}
+
+export const useAuthStore = create<AuthState & AuthActions>()(
     persist(
         (set) => ({
-            user: null,
-            isAuthenticated: false,
+            ...initialState,
 
             login: async (data: { email: string; password: string; }) => {
                 try {
@@ -52,7 +59,7 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            register: async (data) => {
+            register: async (data: any) => {
                 try {
                     const response = await axiosInstance.post("/api/auth/register", data);
 
