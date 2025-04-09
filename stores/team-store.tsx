@@ -71,6 +71,9 @@ export const useTeamStore = create<TeamState & TeamActions>()(
             switchTeam: (team: Team) => {
                 set({ activeTeam: team });
             },
+            reset: () => {
+                set(initialState)
+            }
         }),
         {
             name: "team-storage",

@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { resetAllStores } from "./create";
+
 
 const UserSchema = z.object({
     id: z.string(),
@@ -81,7 +83,8 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
             logout: () => {
                 axios.post("/api/auth/logout").catch(() => { });
-                set({ user: null, isAuthenticated: false });
+                set(initialState);
+                resetAllStores();
                 redirect("/login");
             },
         }),
