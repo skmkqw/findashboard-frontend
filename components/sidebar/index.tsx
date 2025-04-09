@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, JSX } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -10,92 +10,56 @@ import {
   SidebarHeader,
   SidebarInput,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import Logo from "../common/logo";
-import { InboxSection } from './sections/inbox-section';
-import { ProfilesSection } from './sections/profiles-section';
-import { SectionErrorBoundary } from './section-error-boundary';
-import { useSearch } from './hooks/use-search';
-import { useSectionData } from './hooks/use-section-data';
-import type { NavItem, SectionData, SectionDataKey } from './types';
-import { data } from './data';
 import { SlidersHorizontalIcon } from 'lucide-react';
-import { WalletsSection } from './sections/wallets-section';
-import { ProjectsSection } from './sections/projects-section';
-import { ActivitiesSection } from './sections/activities-section';
-import { TeamSection } from './sections/team-section';
-import { SwitchTeamSection } from './sections/switch-team-section';
-
-const getSectionSearchFields = (section: SectionDataKey): string[] => {
-  const searchFieldsMap: Record<SectionDataKey, string[]> = {
-    inbox: ['name', 'content', 'email'],
-    profiles: ['name'],
-    wallets: ['address'],
-    projects: ['name', 'description'],
-    team: ['name'],
-    activities: ['name', 'projectName', 'description'],
-    switchTeam: ['name', 'description'],
-  };
-  
-  return searchFieldsMap[section];
-};
+import { useTeamStore } from '@/stores/team-store';
+import { data } from './data';
+import { useSearch } from './hooks/use-search';
+import { sectionComponents, getSectionSearchFields } from './sections';
+import { SectionErrorBoundary } from './section-error-boundary';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const [activeItem, setActiveItem] = useState<NavItem>(data.navMain[0]);
-    const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-    const { setOpen } = useSidebar();
-    const { sectionData, updateSection } = useSectionData(data.sectionData);
-  
-    const { searchQuery, setSearchQuery, filteredItems } = useSearch(
-      activeItem.section ? sectionData[activeItem.section] : sectionData.inbox,
-      activeItem.section ? getSectionSearchFields(activeItem.section) : []
+  const [activeItem, setActiveItem] = useState(data.navMain[0]);
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  const { setOpen } = useSidebar();
+  const { getTeams } = useTeamStore();
+
+  const activeSectionKey = activeItem.section;
+
+  useEffect(() => {
+    if (activeSectionKey === 'switchTeam' || activeSectionKey === 'team') {
+      getTeams().catch(console.error);
+    }
+  }, [activeSectionKey, getTeams]);
+
+  const { searchQuery, setSearchQuery, filteredItems } = useSearch(
+    activeSectionKey ? data.sectionData[activeSectionKey] : [],
+    activeSectionKey ? getSectionSearchFields(activeSectionKey) : []
+  );
+
+  const renderSectionContent = () => {
+    if (!activeSectionKey) return null;
+
+    const SectionComponent = sectionComponents[activeSectionKey];
+    if (!SectionComponent) return null;
+
+    const sectionProps = {
+      items: filteredItems,
+      ...(activeSectionKey === 'inbox' ? { showUnreadOnly } : {})
+    };
+
+    return (
+      <SectionErrorBoundary>
+        <SectionComponent {...sectionProps} />
+      </SectionErrorBoundary>
     );
-  
-    const renderSectionContent = useMemo(() => {
-      if (!activeItem.section) return null;
-  
-      type SectionComponentsType = {
-        [K in SectionDataKey]: (items: SectionData[K]) => JSX.Element;
-      };
-  
-      const sectionComponents: Partial<SectionComponentsType> = {
-        inbox: (items: SectionData['inbox']) => (
-          <InboxSection items={items} showUnreadOnly={showUnreadOnly} />
-        ),
-        profiles: (items: SectionData['profiles']) => (
-          <ProfilesSection items={items} />
-        ),
-        wallets: (items: SectionData['wallets']) => (
-          <WalletsSection items={items} />
-        ),
-        projects: (items: SectionData['projects']) => (
-          <ProjectsSection items={items} />
-        ),
-        activities: (items: SectionData['activities']) => (
-          <ActivitiesSection items={items} />
-        ),
-        team: (items: SectionData['team']) => (
-          <TeamSection items={items} />
-        ),
-        switchTeam: (items: SectionData['switchTeam']) => (
-          <SwitchTeamSection items={items} />
-        ),
-      };
-  
-      const SectionComponent = sectionComponents[activeItem.section];
-      if (!SectionComponent) return null;
-  
-      return (
-        <SectionErrorBoundary>
-          {SectionComponent(filteredItems as any)}
-        </SectionErrorBoundary>
-      );
-    }, [activeItem.section, filteredItems, showUnreadOnly]);
+  };
 
   return (
     <Sidebar
@@ -103,6 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row"
       {...props}
     >
+      {/* Icon sidebar */}
       <Sidebar
         collapsible="none"
         className="!w-[calc(var(--sidebar-width-icon)_+_1px)] border-r"
@@ -186,35 +151,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarFooter>
       </Sidebar>
 
+      {/* Content sidebar */}
       {activeItem.hasContent && (
         <Sidebar collapsible="none" className="hidden flex-1 md:flex">
-          <SidebarHeader className="gap-3.5 border-b p-4">
+          <SidebarHeader className="border-b p-4">
             <div className="flex w-full items-center justify-between">
               <div className="text-base font-medium text-foreground">
                 {activeItem.title}
               </div>
-              {activeItem.section === "inbox" && (
+              {activeSectionKey === "inbox" && (
                 <Label className="flex items-center gap-2 text-sm">
                   <span>Unreads</span>
-                  <Switch 
+                  <Switch
                     checked={showUnreadOnly}
                     onCheckedChange={setShowUnreadOnly}
-                    className="shadow-none" 
+                    className="shadow-none"
                   />
                 </Label>
               )}
             </div>
-            <SidebarInput 
-              placeholder="Type to search..." 
+            <SidebarInput
+              placeholder="Type to search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </SidebarHeader>
 
           <SidebarContent>
-            <SidebarGroup className="px-0">
+            <SidebarGroup className="p-0">
               <SidebarGroupContent>
-                {renderSectionContent}
+                {renderSectionContent()}
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
