@@ -24,16 +24,24 @@ type TeamState = {
     activeTeam: Team | null;
     teams: Array<Team>;
     personalSpace: Team | null;
-    getTeams: () => Promise<void>;
-    switchTeam: (team: Team) => void;
 };
 
-export const useTeamStore = create<TeamState>()(
+type TeamActions = {
+    getTeams: () => Promise<void>;
+    switchTeam: (team: Team) => void;
+    reset: () => void;
+}
+
+const initialState: TeamState = {
+    activeTeam: null,
+    teams: new Array<Team>,
+    personalSpace: null,
+}
+
+export const useTeamStore = create<TeamState & TeamActions>()(
     persist(
         (set) => ({
-            activeTeam: null,
-            teams: [],
-            personalSpace: null,
+            ...initialState,
 
             getTeams: async () => {
                 try {
