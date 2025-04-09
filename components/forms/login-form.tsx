@@ -20,7 +20,6 @@ import { z } from "zod";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle
 } from "../ui/card";
@@ -72,8 +71,6 @@ export default function LoginForm() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-2xl">Login</CardTitle>
-                        <CardDescription className="text-card-border">
-                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form
@@ -85,14 +82,13 @@ export default function LoginForm() {
                                     control={form.control}
                                     name="email"
                                     render={({ field }) => (
-                                        <FormItem className="grid gap-2">
+                                        <FormItem className="grid gap-1">
                                             <FormLabel htmlFor="email">Email</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     id="email"
                                                     type="email"
                                                     placeholder="example@gmail.com"
-                                                    required
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -101,19 +97,18 @@ export default function LoginForm() {
                                     )}
                                 />
 
-                                <div className="grid gap-2">
+                                <div className="grid gap-1">
                                     <FormField
                                         control={form.control}
                                         name="password"
                                         render={({ field }) => (
-                                            <FormItem className="grid gap-2">
+                                            <FormItem className="grid gap-1">
                                                 <FormLabel htmlFor="password">Password</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         id="password"
                                                         type="password"
                                                         placeholder="**********"
-                                                        required
                                                         {...field}
                                                     />
                                                 </FormControl>
