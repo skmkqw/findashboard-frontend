@@ -73,7 +73,7 @@ export default function WelcomeForm() {
                     </div>
                 </div>
 
-                <Button type="submit" variant="secondary" className="text-xl py-6 px-10">Begin!</Button>
+                <Button type="submit" className="text-xl py-6 px-10">Begin!</Button>
                 <Button
                     variant="ghost"
                     onClick={handleSkipButtonClick}

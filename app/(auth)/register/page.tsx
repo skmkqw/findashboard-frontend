@@ -1,20 +1,21 @@
-import { cn } from "@/lib/utils";
-import RegisterForm from "@/components/forms/register-form";
 import Logo from "@/components/common/logo";
+import RegisterForm from "@/components/forms/register-form";
 
-export default function LoginPage() {
+export default function RegisterPage() {
     return (
-        <div className={cn("grid grid-cols-1 lg:grid-cols-2 items-center justify-items-center gap-12 lg:gap-20")}>
-            <div className={cn("flex flex-col gap-8 items-center lg:items-start")}>
+        <div className="grid items-center justify-items-center gap-12">
+            <div className="flex flex-col gap-4 items-center">
                 <Logo
-                    className="text-5xl sm:text-6xl"
+                    className="text-5xl"
                     type="long"
                 />
-                <p className={cn("text-4xl sm:text-5xl max-w-xl text-center lg:text-start leading-tight lg:leading-[60px]")}>
+                <p className="text-3xl sm:text-4xl max-w-xl text-center">
                     Whatever happens here, <span className="font-bold">stays</span> here
                 </p>
             </div>
-            <RegisterForm className="w-full" />
+            <div className="w-full max-w-sm">
+                <RegisterForm />
+            </div>
         </div>
     );
 }

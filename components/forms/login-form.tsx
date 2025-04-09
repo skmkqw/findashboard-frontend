@@ -11,13 +11,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/stores/auth-store";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from "../ui/card";
 
 const formSchema = z.object({
     email: z
@@ -32,7 +37,7 @@ const formSchema = z.object({
 });
 
 
-export default function LoginForm({ className }: { className?: string }) {
+export default function LoginForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -53,6 +58,7 @@ export default function LoginForm({ className }: { className?: string }) {
             router.push("/");
         } catch (error: any) {
             console.error(error);
+            setErrorMessage("");
             setTimeout(() => {
                 setErrorMessage(error.message || "Failed to register. Please try again.");
             }, 100);
@@ -61,69 +67,88 @@ export default function LoginForm({ className }: { className?: string }) {
 
     return (
         <Form {...form}>
-            <form
-                method="POST"
-                onSubmit={form.handleSubmit(onSubmit)}
-                className={cn("max-w-md bg-[#1C1917] text-white rounded-lg p-6 sm:p-10 flex flex-col gap-8 border-[1px] border-secondary", className)}
-            >
-                <h2 className="text-3xl font-black">Login</h2>
+            <div className="flex flex-col gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-2xl">Login</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <form
+                            method="POST"
+                            onSubmit={form.handleSubmit(onSubmit)}
+                        >
+                            <div className="flex flex-col gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-1">
+                                            <FormLabel htmlFor="email">Email</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    id="email"
+                                                    type="email"
+                                                    placeholder="example@gmail.com"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                <div className="flex flex-col gap-6">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem className="h-24">
-                                <FormLabel className="text-lg">Email</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="email"
-                                        placeholder="example@gmail.com"
-                                        className="bg-white border-white py-3 text-base text-gray-600"
-                                        {...field}
+                                <div className="grid gap-1">
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem className="grid gap-1">
+                                                <FormLabel htmlFor="password">Password</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="password"
+                                                        type="password"
+                                                        placeholder="**********"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
                                     />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
 
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem className="h-24">
-                                <FormLabel className="text-lg">Password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="password"
-                                        placeholder="**********"
-                                        className="bg-white border-white py-3 text-base text-gray-600"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                    <Link
+                                        href="#"
+                                        className="inline-block text-sm underline-offset-4 hover:underline"
+                                    >
+                                        Forgot your password?
+                                    </Link>
+                                </div>
 
-                    <div className="min-h-5">
-                        {errorMessage && <FormMessage className="text-base">{errorMessage}</FormMessage>}
-                    </div>
-                </div>
+                                <div className="min-h-5">
+                                    {errorMessage && <FormMessage className="text-base">{errorMessage}</FormMessage>}
+                                </div>
 
-                <Button
-                    type="submit"
-                    className="text-xl"
-                >
-                    Submit
-                </Button>
-
-                <p className="text-center">
-                    Don't have account?
-                    <Link href="/register" className="underline font-medium ml-3">Register</Link>
-                </p>
-            </form>
+                                <Button
+                                    type="submit"
+                                    variant="secondary"
+                                >
+                                    Login
+                                </Button>
+                            </div>
+                            <div className="mt-4 text-center text-sm">
+                                Don&apos;t have an account?{" "}
+                                <Link
+                                    href="/register"
+                                    className="underline underline-offset-4"
+                                >
+                                    Sign up
+                                </Link>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </Form>
     );
 }

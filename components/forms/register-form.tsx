@@ -1,11 +1,5 @@
 "use client";
 
-import { z } from "zod";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -15,9 +9,15 @@ import {
     FormLabel,
     FormMessage
 } from "@/components/ui/form";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/stores/auth-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const formSchema = z.object({
     firstName: z
@@ -80,107 +80,115 @@ export default function RegisterForm({ className }: { className?: string }) {
 
     return (
         <Form {...form}>
-            <form
-                method="POST"
-                onSubmit={form.handleSubmit(onSubmit)}
-                className={cn("max-w-md bg-[#1C1917] text-white rounded-lg p-6 sm:p-10 flex flex-col gap-8 border-[1px] border-secondary", className)}
-            >
-                <h2 className="text-3xl font-black">Register</h2>
+            <div className="flex flex-col gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-2xl">Register</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <form
+                            method="POST"
+                            onSubmit={form.handleSubmit(onSubmit)}
+                        >
+                            <div className="flex flex-col gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="firstName"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-1">
+                                            <FormLabel>First Name</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="John"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                <div className="flex flex-col gap-6">
-                    <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem className="h-24">
-                                <FormLabel className="text-lg">First Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="text"
-                                        placeholder="John"
-                                        className="bg-white border-white py-3 text-base text-gray-600"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                <FormField
+                                    control={form.control}
+                                    name="lastName"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-1">
+                                            <FormLabel>Last Name</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Doe"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem className="h-24">
-                                <FormLabel className="text-lg">Last Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="text"
-                                        placeholder="Doe"
-                                        className="bg-white border-white py-3 text-base text-gray-600"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-1">
+                                            <FormLabel htmlFor="email">Email</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    id="email"
+                                                    type="email"
+                                                    placeholder="example@gmail.com"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem className="h-24">
-                                <FormLabel className="text-lg">Email</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="email"
-                                        placeholder="example@gmail.com"
-                                        className="bg-white border-white py-3 text-base text-gray-600"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem className="grid gap-1">
+                                            <FormLabel htmlFor="password">Password</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    id="password"
+                                                    type="password"
+                                                    placeholder="**********"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem className="h-24">
-                                <FormLabel className="text-lg">Password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="password"
-                                        placeholder="**********"
-                                        className="bg-white border-white py-3 text-base text-gray-600"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                <div className="min-h-5">
+                                    {errorMessage && <FormMessage className="text-base">{errorMessage}</FormMessage>}
+                                </div>
 
-                    <div className="min-h-5">
-                        {errorMessage && <FormMessage className="text-base">{errorMessage}</FormMessage>}
-                    </div>
-                </div>
-
-                <Button
-                    type="submit"
-                    className="text-xl"
-                >
-                    Submit
-                </Button>
-
-                <p className="text-center">
-                    Already have an account?
-                    <Link href="/login" className="underline font-medium ml-3">Log in</Link>
-                </p>
-            </form>
+                                <Button
+                                    type="submit"
+                                    variant="secondary"
+                                >
+                                    Register
+                                </Button>
+                            </div>
+                            <div className="mt-4 text-center text-sm">
+                                Already have an account?{" "}
+                                <Link
+                                    href="/login"
+                                    className="underline underline-offset-4"
+                                >
+                                    Log in
+                                </Link>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </Form>
     );
 }
