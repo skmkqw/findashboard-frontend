@@ -1,3 +1,4 @@
+import { Team } from "@/stores/team-store";
 import { LucideIcon } from "lucide-react";
 
 export { TeamSchema } from "@/stores/team-store";
@@ -34,11 +35,6 @@ export interface TeamItem extends BaseItem {
   name: string;
 }
 
-export interface SwitchTeamItem extends BaseItem {
-  name: string;
-  description: string;
-}
-
 export interface ActivityItem extends BaseItem {
   name: string;
   projectName: string;
@@ -52,7 +48,7 @@ export interface SectionData {
   projects: ProjectItem[];
   team: TeamItem[];
   activities: ActivityItem[];
-  switchTeam: SwitchTeamItem[];
+  switchTeam: Team[];
 }
 
 export type SectionDataKey = keyof SectionData;
