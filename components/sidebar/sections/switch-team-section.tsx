@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Team, useTeamStore } from '@/stores/team-store';
 import React, { useState } from 'react';
 import { CreatePersonalSpaceDialog } from './create-personal-space-dialog';
+import { CreateTeamDialog } from './create-team-dialog';
 
 interface TeamCardProps {
   team: Team;
@@ -25,13 +26,18 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, isActive, handleClick }) => {
 
 export const SwitchTeamSection: React.FC = () => {
   const { personalSpace, teams, activeTeam, switchTeam } = useTeamStore();
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isCreatePersonalSpaceDialogOpen, setIsCreatePersonalSpaceDialogOpen] = useState(false);
+  const [isCreateTeamDialogOpen, setIsCreateTeamDialogOpen] = useState(false);
 
   return (
     <>
       <CreatePersonalSpaceDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
+        open={isCreatePersonalSpaceDialogOpen}
+        onOpenChange={setIsCreatePersonalSpaceDialogOpen}
+      />
+      <CreateTeamDialog
+        open={isCreateTeamDialogOpen}
+        onOpenChange={setIsCreateTeamDialogOpen}
       />
       {personalSpace !== null ?
         <TeamCard
@@ -44,7 +50,7 @@ export const SwitchTeamSection: React.FC = () => {
           <p>You don't have a personal space!</p>
           <Button 
             className="w-full text-xs"
-            onClick={() => setIsCreateDialogOpen(true)}
+            onClick={() => setIsCreatePersonalSpaceDialogOpen(true)}
           >
             Create
           </Button>
@@ -53,7 +59,12 @@ export const SwitchTeamSection: React.FC = () => {
       {teams.length === 0 ?
         <div className="p-4 flex flex-col items-center gap-3 text-center text-sm border-b">
           <p>You don't have any teams!</p>
-          <Button className="w-full text-xs">Create</Button>
+          <Button 
+            className="w-full text-xs"
+            onClick={() => setIsCreateTeamDialogOpen(true)}
+          >
+            Create
+          </Button>
         </div>
         :
         teams.map((team) => {

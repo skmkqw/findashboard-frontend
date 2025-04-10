@@ -30,6 +30,7 @@ type TeamActions = {
     getTeams: () => Promise<void>;
     switchTeam: (team: Team) => void;
     createPersonalSpace: (data: { spaceName: string }) => Promise<void>;
+    createTeam: (data: { name: string; description: string }) => Promise<void>;
     reset: () => void;
 };
 
@@ -88,6 +89,26 @@ export const useTeamStore = create<TeamState & TeamActions>()(
                             throw new Error("Personal space already exists");
                         }
                         throw new Error(error.response?.data?.message || "Failed to create personal space. Please try again later");
+                    }
+                    throw new Error("An unexpected error occurred");
+                }
+            },
+
+            createTeam: async (data: { name: string; description: string }) => {
+                try {
+                    const response = await axiosInstance.post("/api/teams", data);
+                    const newTeam = TeamSchema.parse(response.data);
+
+                    set((state) => ({
+                        teams: [...state.teams, newTeam],
+                        activeTeam: newTeam,
+                    }));
+                } catch (error: any) {
+                    if (axios.isAxiosError(error)) {
+                        if (error.response?.status === 409) {
+                            throw new Error("Team name already exists");
+                        }
+                        throw new Error(error.response?.data?.message || "Failed to create team. Please try again later");
                     }
                     throw new Error("An unexpected error occurred");
                 }
