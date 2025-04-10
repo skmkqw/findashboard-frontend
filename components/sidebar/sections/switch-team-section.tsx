@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Team, useTeamStore } from '@/stores/team-store';
-import React from 'react';
+import React, { useState } from 'react';
+import { CreatePersonalSpaceDialog } from './create-personal-space-dialog';
 
 interface TeamCardProps {
   team: Team;
@@ -24,9 +25,14 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, isActive, handleClick }) => {
 
 export const SwitchTeamSection: React.FC = () => {
   const { personalSpace, teams, activeTeam, switchTeam } = useTeamStore();
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   return (
     <>
+      <CreatePersonalSpaceDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+      />
       {personalSpace !== null ?
         <TeamCard
           team={personalSpace}
@@ -36,7 +42,12 @@ export const SwitchTeamSection: React.FC = () => {
         :
         <div className="p-4 flex flex-col items-center gap-3 text-center text-sm border-b">
           <p>You don't have a personal space!</p>
-          <Button className="w-full text-xs">Create</Button>
+          <Button 
+            className="w-full text-xs"
+            onClick={() => setIsCreateDialogOpen(true)}
+          >
+            Create
+          </Button>
         </div>
       }
       {teams.length === 0 ?

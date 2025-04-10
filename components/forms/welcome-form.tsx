@@ -1,16 +1,16 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useTeamStore } from "@/stores/team-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MoveRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createPersonalSpace } from "@/actions/teams";
-import { MoveRight } from "lucide-react";
 
 const formSchema = z.object({
     spaceName: z
@@ -19,6 +19,7 @@ const formSchema = z.object({
 });
 
 export default function WelcomeForm() {
+    const createPersonalSpace = useTeamStore((state) => state.createPersonalSpace);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -36,14 +37,16 @@ export default function WelcomeForm() {
             await createPersonalSpace(values);
             router.push("/");
         } catch (error: any) {
-            setErrorMessage(error.message || "Failed to create a space. Please try again.");
+            setErrorMessage("");
+            setTimeout(() => {
+                setErrorMessage(error.message || "Failed to create personal space");
+            }, 200);
         }
     }
 
     function handleSkipButtonClick() {
         router.push("/");
     }
-
 
     return (
         <Form {...form}>
@@ -63,13 +66,13 @@ export default function WelcomeForm() {
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="text-center"/>
+                                <FormMessage className="text-center" />
                             </FormItem>
                         )}
                     />
 
                     <div className="min-h-5">
-                        {errorMessage && <FormMessage className="text-secondary text-center">{errorMessage}</FormMessage>}
+                        {errorMessage && <FormMessage className="text-center">{errorMessage}</FormMessage>}
                     </div>
                 </div>
 
