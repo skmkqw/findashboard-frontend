@@ -33,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const activeSectionKey = activeItem.section;
 
   useEffect(() => {
-    if (activeSectionKey === 'switchTeam' || activeSectionKey === 'team') {
+    if (activeSectionKey === "switchTeam" || activeSectionKey === "teamMembers") {
       getTeams().catch(console.error);
     }
   }, [activeSectionKey, getTeams]);

@@ -18,7 +18,7 @@ export const sectionComponents: Record<SectionDataKey, React.ComponentType<any>>
   wallets: WalletsSection,
   projects: ProjectsSection,
   activities: ActivitiesSection,
-  team: TeamSection,
+  teamMembers: TeamSection,
   switchTeam: SwitchTeamSection,
 };
 
@@ -28,7 +28,7 @@ export const getSectionSearchFields = (section: SectionDataKey): string[] => {
     profiles: ['name'],
     wallets: ['address'],
     projects: ['name', 'description'],
-    team: ['name'],
+    teamMembers: ['name'],
     activities: ['name', 'projectName', 'description'],
     switchTeam: ['name', 'description'],
   };

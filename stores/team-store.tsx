@@ -6,29 +6,52 @@ import { z } from "zod";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export interface TeamBase {
+    id: string;
+    name: string;
+    description: string | null;
+};
+
+const TeamMemberSchema = z.object({
+    id: z.string(),
+    fullName: z.string(),
+    email: z.string().email(),
+});
+
 export const TeamSchema = z.object({
     id: z.string(),
     name: z.string(),
-    description: z.string().nullable()
+    description: z.string().nullable(),
+    members: z.array(TeamMemberSchema),
+});
+
+const PerosnalSpaceSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string().nullable(),
 });
 
 const TeamsResponseSchema = z.object({
     teams: z.array(TeamSchema),
-    personalSpace: TeamSchema.nullable(),
+    personalSpace: PerosnalSpaceSchema.nullable(),
 });
 
+export interface Team extends TeamBase {
+    members: TeamMember[];
+}
 
-export type Team = z.infer<typeof TeamSchema>;
+export type PersonalSpace = TeamBase;
+export type TeamMember = z.infer<typeof TeamMemberSchema>;
 
 type TeamState = {
-    activeTeam: Team | null;
+    activeTeam: TeamBase | null;
     teams: Array<Team>;
-    personalSpace: Team | null;
+    personalSpace: PersonalSpace | null;
 };
 
 type TeamActions = {
     getTeams: () => Promise<void>;
-    switchTeam: (team: Team) => void;
+    switchTeam: (team: TeamBase) => void;
     createPersonalSpace: (data: { spaceName: string }) => Promise<void>;
     createTeam: (data: { name: string; description: string }) => Promise<void>;
     reset: () => void;
@@ -70,7 +93,7 @@ export const useTeamStore = create<TeamState & TeamActions>()(
                 }
             },
 
-            switchTeam: (team: Team) => {
+            switchTeam: (team: TeamBase) => {
                 set({ activeTeam: team });
             },
 

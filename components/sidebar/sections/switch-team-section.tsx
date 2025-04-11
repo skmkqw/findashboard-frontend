@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Team, useTeamStore } from '@/stores/team-store';
+import { PersonalSpace, Team, useTeamStore } from '@/stores/team-store';
 import React, { useState } from 'react';
 import { CreatePersonalSpaceDialog } from './create-personal-space-dialog';
 import { CreateTeamDialog } from './create-team-dialog';
 
 interface TeamCardProps {
-  team: Team;
+  team: Team | PersonalSpace;
   isActive: boolean;
-  handleClick: (team: Team) => void;
+  handleClick: (team: Team | PersonalSpace) => void;
 }
 
 const TeamCard: React.FC<TeamCardProps> = ({ team, isActive, handleClick }) => {
