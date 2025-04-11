@@ -1,8 +1,8 @@
-import { Team } from "@/stores/team-store";
+import { Team, TeamMember } from "@/stores/team-store";
 import { LucideIcon } from "lucide-react";
 
 export { TeamSchema } from "@/stores/team-store";
-export type { Team } from "@/stores/team-store";
+export type { Team, TeamMember } from "@/stores/team-store";
 
 interface BaseItem {
   id: string;
@@ -46,7 +46,7 @@ export interface SectionData {
   profiles: ProfileItem[];
   wallets: WalletItem[];
   projects: ProjectItem[];
-  team: TeamItem[];
+  teamMembers: TeamMember[];
   activities: ActivityItem[];
   switchTeam: Team[];
 }
