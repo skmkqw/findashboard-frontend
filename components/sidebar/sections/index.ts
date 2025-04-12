@@ -7,12 +7,12 @@ import { SwitchTeamSection } from './switch-team-section';
 import { TeamSection } from './team-section';
 import { WalletsSection } from './wallets-section';
 
-export type SectionComponentProps<T = any> = {
-  items: T[];
-  [key: string]: any;
+export type SectionComponentProps = {
+  searchQuery?: string;
+  showUnreadOnly?: boolean;
 };
 
-export const sectionComponents: Record<SectionDataKey, React.ComponentType<any>> = {
+export const sectionComponents: Record<SectionDataKey, React.ComponentType<SectionComponentProps>> = {
   inbox: InboxSection,
   profiles: ProfilesSection,
   wallets: WalletsSection,
