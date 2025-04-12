@@ -1,4 +1,4 @@
-import { TeamMember, PersonalSpace, useTeamStore, TeamBase, Team } from '@/stores/team-store';
+import { Team, TeamBase, TeamMember, useTeamStore } from '@/stores/team-store';
 import React from 'react';
 
 const TeamMemberItem: React.FC<{ member: TeamMember }> = ({ member }) => {
