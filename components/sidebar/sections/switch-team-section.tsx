@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { PersonalSpace, Team, useTeamStore } from '@/stores/team-store';
 import React, { useEffect, useState } from 'react';
-import { CreatePersonalSpaceDialog } from './create-personal-space-dialog';
-import { CreateTeamDialog } from './create-team-dialog';
+import { CreatePersonalSpaceDialog } from '../dialogs/create-personal-space-dialog';
+import { CreateTeamDialog } from '../dialogs/create-team-dialog';
 import { filterItems, sectionSearchFields } from '../utils/filter-items';
 import { SectionProps } from '../types';
 
