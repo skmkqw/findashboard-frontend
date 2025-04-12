@@ -8,6 +8,7 @@ import { TeamSection } from './team-section';
 import { WalletsSection } from './wallets-section';
 
 export const sectionComponents: Record<SectionDataKey, React.ComponentType<SectionProps>> = {
+  // @ts-ignore
   inbox: InboxSection,
   profiles: ProfilesSection,
   wallets: WalletsSection,
