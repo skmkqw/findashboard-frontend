@@ -4,9 +4,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Kode_Mono } from "next/font/google";
 import { AppSidebar } from "@/components/sidebar/index";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { ModeToggle } from "@/components/common/mode-toggle";
+import { ModeToggle } from "@/components/shared/mode-toggle";
 import NavUser from "@/components/nav-user";
-import Logo from "@/components/common/logo";
+import Logo from "@/components/shared/logo";
 
 export const metadata: Metadata = {
     title: "ZBank",

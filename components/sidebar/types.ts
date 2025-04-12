@@ -8,7 +8,7 @@ export type SectionDataKey = "inbox"
   | "activities"
   | "switchTeam";
 
-export interface NavItem {
+export interface SidebarItem {
   title: string;
   icon: LucideIcon;
   hasContent: boolean;

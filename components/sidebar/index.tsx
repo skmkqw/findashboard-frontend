@@ -17,12 +17,12 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { ArrowUpDownIcon, ChartBarIcon, HomeIcon, InboxIcon, PresentationIcon, SlidersHorizontalIcon, UserIcon, UsersIcon, WalletIcon } from 'lucide-react';
 import React, { useState } from 'react';
-import Logo from "../common/logo";
+import Logo from "../shared/logo";
 import { SectionErrorBoundary } from './section-error-boundary';
 import { sectionComponents } from './sections';
-import { NavItem } from './types';
+import { SidebarItem } from './types';
 
-const sidebarItems: NavItem[] = [
+const sidebarItems: SidebarItem[] = [
   {
     title: "Inbox",
     url: "#",
