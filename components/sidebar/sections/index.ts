@@ -1,4 +1,4 @@
-import { SectionDataKey } from '../types';
+import { SectionDataKey, SectionProps } from '../types';
 import { ActivitiesSection } from './activities-section';
 import { InboxSection } from './inbox-section';
 import { ProfilesSection } from './profiles-section';
@@ -7,12 +7,8 @@ import { SwitchTeamSection } from './switch-team-section';
 import { TeamSection } from './team-section';
 import { WalletsSection } from './wallets-section';
 
-export type SectionComponentProps<T = any> = {
-  items: T[];
-  [key: string]: any;
-};
-
-export const sectionComponents: Record<SectionDataKey, React.ComponentType<any>> = {
+export const sectionComponents: Record<SectionDataKey, React.ComponentType<SectionProps>> = {
+  // @ts-ignore
   inbox: InboxSection,
   profiles: ProfilesSection,
   wallets: WalletsSection,

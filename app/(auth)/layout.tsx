@@ -1,5 +1,5 @@
 import "../globals.css";
-import Container from "@/components/common/container";
+import Container from "@/components/shared/container";
 import { cn } from "@/lib/utils";
 import { Kode_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";

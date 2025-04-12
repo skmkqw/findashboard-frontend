@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import Logo from "@/components/common/logo";
+import Logo from "@/components/shared/logo";
 import WelcomeForm from "@/components/forms/welcome-form";
 
 export default function WelcomePage() {

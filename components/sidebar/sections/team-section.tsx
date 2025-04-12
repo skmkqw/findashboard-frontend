@@ -1,5 +1,7 @@
-import { TeamMember, PersonalSpace, useTeamStore, TeamBase, Team } from '@/stores/team-store';
-import React from 'react';
+import { Team, TeamBase, TeamMember, useTeamStore } from '@/stores/team-store';
+import React, { useEffect } from 'react';
+import { filterItems, sectionSearchFields } from '../utils/filter-items';
+import { SectionProps } from '../types';
 
 const TeamMemberItem: React.FC<{ member: TeamMember }> = ({ member }) => {
   return (
@@ -16,10 +18,12 @@ const isTeam = (team: TeamBase): team is Team => {
   return 'members' in team;
 };
 
-export const TeamSection: React.FC = () => {
-  const { activeTeam } = useTeamStore();
+export const TeamSection: React.FC<SectionProps> = ({ searchQuery = "" }) => {
+  const { activeTeam, getTeams } = useTeamStore();
 
-  console.log(activeTeam);
+  useEffect(() => {
+    getTeams().catch(console.error);
+  }, [getTeams]);
 
   if (!activeTeam) {
     return (
@@ -29,18 +33,30 @@ export const TeamSection: React.FC = () => {
     );
   }
 
+  if (!isTeam(activeTeam)) {
+    return (
+      <div className="p-4 text-sm text-muted-foreground">
+        This is your personal space. It doesn't have team members.
+      </div>
+    );
+  }
+
+  const filteredMembers = filterItems(
+    activeTeam.members,
+    searchQuery,
+    sectionSearchFields.teamMembers
+  );
+
   return (
     <div className="flex flex-col gap-2">
-      {isTeam(activeTeam) ? (
-        <div className="flex flex-col gap-2">
-          {activeTeam.members.map((member) => (
-            <TeamMemberItem key={member.id} member={member} />
-          ))}
+      {filteredMembers.length === 0 ? (
+        <div className="p-4 text-center text-sm text-muted-foreground">
+          No team members found
         </div>
       ) : (
-        <div className="p-4 text-sm text-muted-foreground">
-          This is your personal space. It doesn't have team members.
-        </div>
+        filteredMembers.map((member) => (
+          <TeamMemberItem key={member.id} member={member} />
+        ))
       )}
     </div>
   );

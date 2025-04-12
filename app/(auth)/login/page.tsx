@@ -1,4 +1,4 @@
-import Logo from "@/components/common/logo";
+import Logo from "@/components/shared/logo";
 import LoginForm from "@/components/forms/login-form";
 
 

@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { PersonalSpace, Team, useTeamStore } from '@/stores/team-store';
-import React, { useState } from 'react';
-import { CreatePersonalSpaceDialog } from './create-personal-space-dialog';
-import { CreateTeamDialog } from './create-team-dialog';
+import React, { useEffect, useState } from 'react';
+import { CreatePersonalSpaceDialog } from '../dialogs/create-personal-space-dialog';
+import { CreateTeamDialog } from '../dialogs/create-team-dialog';
+import { filterItems, sectionSearchFields } from '../utils/filter-items';
+import { SectionProps } from '../types';
 
 interface TeamCardProps {
   team: Team | PersonalSpace;
@@ -24,10 +26,20 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, isActive, handleClick }) => {
   );
 }
 
-export const SwitchTeamSection: React.FC = () => {
-  const { personalSpace, teams, activeTeam, switchTeam } = useTeamStore();
+export const SwitchTeamSection: React.FC<SectionProps> = ({ searchQuery = "" }) => {
+  const { personalSpace, teams, activeTeam, switchTeam, getTeams } = useTeamStore();
   const [isCreatePersonalSpaceDialogOpen, setIsCreatePersonalSpaceDialogOpen] = useState(false);
   const [isCreateTeamDialogOpen, setIsCreateTeamDialogOpen] = useState(false);
+
+  useEffect(() => {
+    getTeams().catch(console.error);
+  }, [getTeams]);
+
+  const filteredTeams = filterItems(
+    teams,
+    searchQuery,
+    sectionSearchFields.switchTeam
+  );
 
   return (
     <>
@@ -39,44 +51,57 @@ export const SwitchTeamSection: React.FC = () => {
         open={isCreateTeamDialogOpen}
         onOpenChange={setIsCreateTeamDialogOpen}
       />
-      {personalSpace !== null ?
+      <div className="px-4 py-2 font-bold border-b text-lg">
+        Personal Space
+      </div>
+      {personalSpace !== null ? (
         <TeamCard
           team={personalSpace}
           isActive={activeTeam?.id === personalSpace.id}
           handleClick={switchTeam}
         />
-        :
+      ) : (
         <div className="p-4 flex flex-col items-center gap-3 text-center text-sm border-b">
           <p>You don't have a personal space!</p>
-          <Button 
+          <Button
             className="w-full text-xs"
             onClick={() => setIsCreatePersonalSpaceDialogOpen(true)}
           >
             Create
           </Button>
         </div>
-      }
-      {teams.length === 0 ?
+      )}
+      <div className="px-4 py-2 font-bold border-b text-lg">
+        Teams
+      </div>
+      {teams.length === 0 ? (
         <div className="p-4 flex flex-col items-center gap-3 text-center text-sm border-b">
           <p>You don't have any teams!</p>
-          <Button 
+          <Button
             className="w-full text-xs"
             onClick={() => setIsCreateTeamDialogOpen(true)}
           >
             Create
           </Button>
         </div>
-        :
-        teams.map((team) => {
-          return (
-            <TeamCard
-              key={team.id}
-              team={team}
-              isActive={activeTeam?.id === team.id}
-              handleClick={switchTeam}
-            />
-          );
-        })}
+      ) : (
+        <>
+          {filteredTeams.length === 0 ? (
+            <div className="p-4 text-center text-sm text-muted-foreground">
+              No teams found
+            </div>
+          ) : (
+            filteredTeams.map((team) => (
+              <TeamCard
+                key={team.id}
+                team={team}
+                isActive={activeTeam?.id === team.id}
+                handleClick={switchTeam}
+              />
+            ))
+          )}
+        </>
+      )}
     </>
   );
 };
