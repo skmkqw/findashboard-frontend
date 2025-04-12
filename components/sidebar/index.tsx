@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -18,30 +18,17 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import Logo from "../common/logo";
 import { SlidersHorizontalIcon } from 'lucide-react';
-import { useTeamStore } from '@/stores/team-store';
 import { data } from './data';
-import { useSearch } from './hooks/use-search';
-import { sectionComponents, getSectionSearchFields } from './sections';
+import { sectionComponents } from './sections';
 import { SectionErrorBoundary } from './section-error-boundary';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [activeItem, setActiveItem] = useState(data.navMain[0]);
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { setOpen } = useSidebar();
-  const { getTeams } = useTeamStore();
 
   const activeSectionKey = activeItem.section;
-
-  useEffect(() => {
-    if (activeSectionKey === "switchTeam" || activeSectionKey === "teamMembers") {
-      getTeams().catch(console.error);
-    }
-  }, [activeSectionKey, getTeams]);
-
-  const { searchQuery, setSearchQuery, filteredItems } = useSearch(
-    activeSectionKey ? data.sectionData[activeSectionKey] : [],
-    activeSectionKey ? getSectionSearchFields(activeSectionKey) : []
-  );
 
   const renderSectionContent = () => {
     if (!activeSectionKey) return null;
@@ -50,7 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     if (!SectionComponent) return null;
 
     const sectionProps = {
-      items: filteredItems,
+      searchQuery,
       ...(activeSectionKey === 'inbox' ? { showUnreadOnly } : {})
     };
 
