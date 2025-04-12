@@ -1,21 +1,16 @@
 import React from 'react';
-import type { ProfileItem } from '../types';
-import { data } from '../data';
+import { sectionData } from '../data';
+import type { SectionProps } from '../types';
+import { filterItems, sectionSearchFields } from '../utils/filter-items';
 
-interface ProfilesSectionProps {
-  searchQuery?: string;
-}
-
-export const ProfilesSection: React.FC<ProfilesSectionProps> = ({ searchQuery = "" }) => {
-  // For now, we're using mock data from data.ts
-  // In the future, this will be replaced with real data from an API
-  const items = data.sectionData.profiles;
+export const ProfilesSection: React.FC<SectionProps> = ({ searchQuery = "" }) => {
+  const items = sectionData.profiles;
   
-  const filteredItems = searchQuery
-    ? items.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : items;
+  const filteredItems = filterItems(
+    items,
+    searchQuery,
+    sectionSearchFields.profiles
+  );
 
   return (
     <>
@@ -28,7 +23,7 @@ export const ProfilesSection: React.FC<ProfilesSectionProps> = ({ searchQuery = 
           <a
             href={`/profiles/${profile.id}`}
             key={profile.id}
-            className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            className="flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <div className="flex justify-between w-full">
               <span>{profile.name}</span>

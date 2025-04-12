@@ -1,31 +1,25 @@
 import React from 'react';
-import type { InboxItem } from '../types';
-import { data } from '../data';
+import { sectionData } from '../data';
+import type { SectionProps } from '../types';
+import { filterItems, sectionSearchFields } from '../utils/filter-items';
 
-interface InboxSectionProps {
-  searchQuery?: string;
-  showUnreadOnly?: boolean;
+interface InboxSectionProps extends SectionProps {
+  showUnreadOnly: boolean;
 }
 
 export const InboxSection: React.FC<InboxSectionProps> = ({ 
   searchQuery = "", 
   showUnreadOnly = false 
 }) => {
-  // For now, we're using mock data from data.ts
-  // In the future, this will be replaced with real data from an API
-  const items = data.sectionData.inbox;
+  const items: any[] = sectionData.inbox;
   
-  // First filter by unread if needed
   const unreadFilteredItems = showUnreadOnly ? items.filter(item => item.isUnread) : items;
   
-  // Then filter by search query if provided
-  const filteredItems = searchQuery
-    ? unreadFilteredItems.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.content.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : unreadFilteredItems;
+  const filteredItems = filterItems(
+    unreadFilteredItems,
+    searchQuery,
+    sectionSearchFields.inbox
+  );
 
   return (
     <>
@@ -38,7 +32,7 @@ export const InboxSection: React.FC<InboxSectionProps> = ({
           <a
             href={`/inbox/${mail.id}`}
             key={mail.id}
-            className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            className="flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <div className="flex w-full items-center gap-2">
               <span className={mail.isUnread ? "font-bold" : ""}>{mail.name}</span>

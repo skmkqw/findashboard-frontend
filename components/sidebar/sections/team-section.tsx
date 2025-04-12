@@ -1,9 +1,7 @@
 import { Team, TeamBase, TeamMember, useTeamStore } from '@/stores/team-store';
 import React, { useEffect } from 'react';
-
-interface TeamSectionProps {
-  searchQuery?: string;
-}
+import { filterItems, sectionSearchFields } from '../utils/filter-items';
+import { SectionProps } from '../types';
 
 const TeamMemberItem: React.FC<{ member: TeamMember }> = ({ member }) => {
   return (
@@ -20,7 +18,7 @@ const isTeam = (team: TeamBase): team is Team => {
   return 'members' in team;
 };
 
-export const TeamSection: React.FC<TeamSectionProps> = ({ searchQuery = "" }) => {
+export const TeamSection: React.FC<SectionProps> = ({ searchQuery = "" }) => {
   const { activeTeam, getTeams } = useTeamStore();
 
   useEffect(() => {
@@ -43,12 +41,11 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ searchQuery = "" }) =>
     );
   }
 
-  const filteredMembers = searchQuery
-    ? activeTeam.members.filter(member => 
-        member.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        member.email.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : activeTeam.members;
+  const filteredMembers = filterItems(
+    activeTeam.members,
+    searchQuery,
+    sectionSearchFields.teamMembers
+  );
 
   return (
     <div className="flex flex-col gap-2">

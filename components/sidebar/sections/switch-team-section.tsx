@@ -3,15 +3,13 @@ import { PersonalSpace, Team, useTeamStore } from '@/stores/team-store';
 import React, { useEffect, useState } from 'react';
 import { CreatePersonalSpaceDialog } from './create-personal-space-dialog';
 import { CreateTeamDialog } from './create-team-dialog';
+import { filterItems, sectionSearchFields } from '../utils/filter-items';
+import { SectionProps } from '../types';
 
 interface TeamCardProps {
   team: Team | PersonalSpace;
   isActive: boolean;
   handleClick: (team: Team | PersonalSpace) => void;
-}
-
-interface SwitchTeamSectionProps {
-  searchQuery?: string;
 }
 
 const TeamCard: React.FC<TeamCardProps> = ({ team, isActive, handleClick }) => {
@@ -28,7 +26,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, isActive, handleClick }) => {
   );
 }
 
-export const SwitchTeamSection: React.FC<SwitchTeamSectionProps> = ({ searchQuery = "" }) => {
+export const SwitchTeamSection: React.FC<SectionProps> = ({ searchQuery = "" }) => {
   const { personalSpace, teams, activeTeam, switchTeam, getTeams } = useTeamStore();
   const [isCreatePersonalSpaceDialogOpen, setIsCreatePersonalSpaceDialogOpen] = useState(false);
   const [isCreateTeamDialogOpen, setIsCreateTeamDialogOpen] = useState(false);
@@ -37,12 +35,11 @@ export const SwitchTeamSection: React.FC<SwitchTeamSectionProps> = ({ searchQuer
     getTeams().catch(console.error);
   }, [getTeams]);
 
-  const filteredTeams = searchQuery
-    ? teams.filter(team =>
-      team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (team.description && team.description.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
-    : teams;
+  const filteredTeams = filterItems(
+    teams,
+    searchQuery,
+    sectionSearchFields.switchTeam
+  );
 
   return (
     <>

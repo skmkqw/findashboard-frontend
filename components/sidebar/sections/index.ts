@@ -1,4 +1,4 @@
-import { SectionDataKey } from '../types';
+import { SectionDataKey, SectionProps } from '../types';
 import { ActivitiesSection } from './activities-section';
 import { InboxSection } from './inbox-section';
 import { ProfilesSection } from './profiles-section';
@@ -7,12 +7,7 @@ import { SwitchTeamSection } from './switch-team-section';
 import { TeamSection } from './team-section';
 import { WalletsSection } from './wallets-section';
 
-export type SectionComponentProps = {
-  searchQuery?: string;
-  showUnreadOnly?: boolean;
-};
-
-export const sectionComponents: Record<SectionDataKey, React.ComponentType<SectionComponentProps>> = {
+export const sectionComponents: Record<SectionDataKey, React.ComponentType<SectionProps>> = {
   inbox: InboxSection,
   profiles: ProfilesSection,
   wallets: WalletsSection,
