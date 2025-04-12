@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
@@ -10,20 +10,78 @@ import {
   SidebarHeader,
   SidebarInput,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { ArrowUpDownIcon, ChartBarIcon, HomeIcon, InboxIcon, PresentationIcon, SlidersHorizontalIcon, UserIcon, UsersIcon, WalletIcon } from 'lucide-react';
+import React, { useState } from 'react';
 import Logo from "../common/logo";
-import { SlidersHorizontalIcon } from 'lucide-react';
-import { data } from './data';
-import { sectionComponents } from './sections';
 import { SectionErrorBoundary } from './section-error-boundary';
+import { sectionComponents } from './sections';
+import { NavItem } from './types';
+
+const sidebarItems: NavItem[] = [
+  {
+    title: "Inbox",
+    url: "#",
+    icon: InboxIcon,
+    hasContent: true,
+    section: "inbox",
+  },
+  {
+    title: "Home",
+    url: "/home",
+    icon: HomeIcon,
+    hasContent: false,
+  },
+  {
+    title: "Projects",
+    url: "#",
+    icon: PresentationIcon,
+    hasContent: true,
+    section: "projects",
+  },
+  {
+    title: "Activities",
+    url: "#",
+    icon: ChartBarIcon,
+    hasContent: true,
+    section: "activities",
+  },
+  {
+    title: "Profiles",
+    url: "#",
+    icon: UserIcon,
+    hasContent: true,
+    section: "profiles",
+  },
+  {
+    title: "Wallets",
+    url: "#",
+    icon: WalletIcon,
+    hasContent: true,
+    section: "wallets",
+  },
+  {
+    title: "Team Members",
+    url: "#",
+    icon: UsersIcon,
+    hasContent: true,
+    section: "teamMembers",
+  },
+  {
+    title: "Switch Team",
+    url: "#",
+    icon: ArrowUpDownIcon,
+    hasContent: true,
+    section: "switchTeam",
+  },
+]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [activeItem, setActiveItem] = useState(data.navMain[0]);
+  const [activeItem, setActiveItem] = useState(sidebarItems[0]);
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { setOpen } = useSidebar();
@@ -77,7 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroup>
             <SidebarGroupContent className="px-1.5 md:px-0">
               <SidebarMenu>
-                {data.navMain.map((item) => (
+                {sidebarItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     {item.hasContent ? (
                       <SidebarMenuButton
